@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" /><!-- Bootstrap -->
 <link rel="stylesheet" href="/css/website.css" type="text/css">
 <link rel="stylesheet" href="/css/responsive.css" type="text/css" /><!-- Responsive -->
+<link rel="stylesheet" href="/css/perfect-scrollbar.css" type="text/css" /><!-- Responsive -->
 
 </head>
 <body>
@@ -32,7 +33,13 @@
         <span>Powered by:</span> <a href="/" title="">EXdeliver - PlayList</a>
     </div>
 
-<a title="" class="slide-panel-btn gray ng-scope"><i class="fa fa-thumbs-up"></i> Support</a>
+<div class="accountservice">
+    @if(Sentry::check()))
+    <a href="/logoff" class="btn btn-warning">Sign out</a>
+    @else
+    <a href="/login" class="btn btn-primary">Login</a> <a href="/signup" class="btn btn-success">Register</a>
+    @endif
+</div>
 <div class="dropdown profile ng-scope">
 	<a title="">
 	</a>
@@ -48,34 +55,29 @@
         </div>
     </div>
 <script type="text/javascript" src="/js/jquery-2.1.1.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(window).scroll(
-            {
-                previousTop: 0
-            },
-            function () {
-            // get current distance from top of viewport
-            var currentTop = $(window).scrollTop();
-            // define the header height here
-            var headerHeight = 50;
-            // if user has scrolled past header, initiate the scroll up/scroll down hide show effect
-            if( $(window).scrollTop() > headerHeight ) {
-              if (currentTop < this.previousTop) {
-                $(".sidebar em").text("Up");
-                $(".header").removeClass("hide");
-                $(".header").addClass("show");
-              } else {
-                $(".sidebar em").text("Down");
-                $(".header").removeClass("show");
-                $(".header").addClass("hide");
-              }
-            }
-            this.previousTop = currentTop;
-        });
-    });
-</script>
+<script type="text/javascript" src="/js/jqueryui-1.10.3.min.js"></script>
 @yield('bottomscripts')
 
+<?php
+$cookielaw = Cookie::get('dontallowcookies');
+$cookievenster = Cookie::get('dontshowvenster');
+?>
+
+@if(!isset($cookievenster))
+    <div class="cookiemelding">
+    Wij gebruiken cookies om uw gebruikerservaring te verbeteren.<br />
+        <a href="/dontshowcookie" style="color: black;" rel="nofollow">Sluit venster [ X ]</a>
+    </div>
+@endif
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-33276780-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </body>
 </html>

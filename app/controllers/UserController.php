@@ -21,23 +21,76 @@ class UserController extends BaseController
         }
     }
 
+    public function facebookRegister()
+    {
+        $facebook = $this->facebookOauth();
+
+        // get user or login or authorize user
+
+        if ($facebook->getUser() != 0) {
+            $user = $facebook->getUser();
+            $fbme = (object) $facebook->api('/me');
+            // add user to database
+            try{
+                $checkuser = User::where('fbid', $fbme->id)->firstOrFail();
+
+            }catch(Exception $e){
+                return View::make('user.fbsignup')
+                    ->with('facebookapi', $fbme);
+            }
+
+                // Find the user using the user id
+                $fuser = Sentry::findUserById($checkuser->id);
+
+                // Log the user in
+                $result = Sentry::loginAndRemember($fuser);
+
+                return Redirect::to('/');
+
+
+        }else{
+
+            $params = array(
+                'fbconnect'=>0,
+                'canvas'=>1,
+                'scope'=>'publish_stream,email',
+            );
+            $loginUrl = $facebook->getLoginUrl($params);
+            return Redirect::to($loginUrl);
+        }
+
+    }
+
     public function getSignout()
     {
         Sentry::logout();
-        return Redirect::back();
+        return Redirect::to('/');
     }
 
     public function doSignup()
     {
-        $rules = array(
-            'groupname'                 => 'required|between:3,32',
-            'email'                     => 'required|email',
-            'password'                  => 'required|between:3,32',
-            'password_verification'     => 'required|between:3,32|same:password',
-            'first_name'                => 'required',
-            'last_name'                 => 'required',
-            'terms'                     => 'required:min:1',
-        );
+
+        $authtype = Input::get('authtype');
+
+        if($authtype == 'facebook'){
+            $rules = array(
+                'groupname' => 'required|between:3,32',
+                'email' => 'required|email',
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'terms' => 'required:min:1',
+            );
+        }else {
+            $rules = array(
+                'groupname' => 'required|between:3,32',
+                'email' => 'required|email',
+                'password' => 'required|between:3,32',
+                'password_verification' => 'required|between:3,32|same:password',
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'terms' => 'required:min:1',
+            );
+        }
 
         // Create a new validator instance from our validation rules
         $validator = Validator::make(Input::all(), $rules);
@@ -61,7 +114,10 @@ class UserController extends BaseController
                 ->withErrors($validator);
         }*/
 
+        $fbid = Input::get('fbid');
+
         $user = new User();
+        $user->fbid = (isset($fbid) && $fbid != null) ? $fbid : NULL;
         $user->first_name = Input::get('first_name');
         $user->last_name = Input::get('last_name');
         $user->email = Input::get('email');
@@ -82,6 +138,15 @@ class UserController extends BaseController
         $group->user_id = $user->id;
         $group->group_id = $groupname->id;
         $group->save();
+
+        $playlist = new Playlist();
+        $playlist->group_id = $groupname->id;
+        $playlist->name = Input::get('groupname');
+        $playlist->invitecode = $this->generateRandomString(100);
+        $playlist->created_at = date('Y-m-d');
+        $playlist->updated_at = date('Y-m-d');
+        $playlist->save();
+
 
         return Redirect::to('/login')
             ->with('status', Lang::get('user.usercreated'));
@@ -172,4 +237,57 @@ class UserController extends BaseController
                 ->withErrors($validator);
         }
     }
+
+    public function doGetNames()
+    {
+        $email = Input::get('email');
+
+        try {
+            $user = User::where('email', '=', $email)->firstOrFail();
+            return $user->first_name . ' ' . $user->last_name;
+
+        }catch(Exception $e){
+            return 'No user found';
+        }
+
+    }
+
+    public function facebookInvite($playlistid = null)
+    {
+
+        $playlist = Playlist::find($playlistid);
+
+        $group = GroupName::where('id', '=', $playlist->group_id)->firstOrFail();
+
+        $parameters = array(
+        'app_id' => $this->facebookOauth()->getAppId(),
+        'link' => 'http://getyoursitenoticed.com/user/fb/accept/'.$group->slug.'/'.$playlist->invitecode,
+        'redirect_uri' => 'http://getyoursitenoticed.com/'
+        );
+
+        $url = 'http://www.facebook.com/dialog/send?'.http_build_query($parameters);
+        return Redirect::to($url);
+
+    }
+
+    public function facebookInviteAccept($slug = null, $invitecode = null)
+    {
+        $group = GroupName::where('slug', '=', $slug)->firstOrFail();
+        $playlist = Playlist::where('group_id', '=', $group->id)->firstOrFail();
+        $invite = new PlayListController();
+
+        return $invite->doAddMeInvite($playlist->id, $invitecode);
+    }
+
+    private function generateRandomString($length = 10) {
+
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
 }

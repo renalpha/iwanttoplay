@@ -16,7 +16,9 @@ class BaseController extends Controller {
             if (Sentry::check()){
                 View::share([
                     'groupid'       => $this->getCurrentUserGroup(),
-                    'currentuser'   => $this->getCurrentUser()
+                    'currentuser'   => $this->getCurrentUser(),
+                    'yt-height'     => '600',
+
                 ]);
             }
 		}
@@ -27,15 +29,6 @@ class BaseController extends Controller {
         if(Sentry::check()) {
             $user = User::find(Sentry::getUser()->id);
             return $user->group->group_id;
-        }
-    }
-
-    public function getGroup()
-    {
-        if(Sentry::check()) {
-            $user = User::find(Sentry::getUser()->id);
-            $groupname = GroupName::where('id', '=', $user->group->group_id)->firstOrFail();
-            return $groupname;
         }
     }
 
@@ -61,13 +54,13 @@ class BaseController extends Controller {
 
     public function mediaTypesIcons()
     {
-        $mediaTypes = array('soundcloud' => 'soundcloud-icon.png', 'youtube' => 'youtube-icon.png', 'spotify' => 'spotify-icon.png');
+        $mediaTypes = array('mixcloud' => 'mixcloud-icon.png','soundcloud' => 'soundcloud-icon.png', 'youtube' => 'youtube-icon.png', 'spotify' => 'spotify-icon.png');
         return $mediaTypes;
     }
 
     public function mediaTypes()
     {
-        $mediaTypes = array('soundcloud' => 'soundcloud', 'youtube' => 'youtube', 'spotify' => 'spotify');
+        $mediaTypes = array('mixcloud' => 'mixcloud', 'soundcloud' => 'soundcloud', 'youtube' => 'youtube', 'spotify' => 'spotify');
         return $mediaTypes;
     }
 
@@ -76,6 +69,18 @@ class BaseController extends Controller {
         $trackURLinfo = (object) parse_url($url);
         $getDomain = preg_split('/(?=\.[^.]+$)/', $trackURLinfo->host);
         return $getDomain[0];
+    }
+
+    public function facebookOauth()
+    {
+            // Use a single object of a class throughout the lifetime of an application.
+            $application = array(
+                'appId' => '1560119087592235',
+                'secret' => '46e033980833bc06a2fec8e9d29e5154'
+            );
+
+            // getInstance
+            return FacebookConnect::getFacebook($application);
     }
 
 }

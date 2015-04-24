@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -94,7 +94,8 @@ return array(
 	*/
 
 	'providers' => array(
-
+        'Thujohn\Analytics\AnalyticsServiceProvider',
+        'Pitchanon\FacebookConnect\FacebookConnectServiceProvider',
         'Cartalyst\Sentry\SentryServiceProvider',
         'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
@@ -150,7 +151,7 @@ return array(
 	*/
 
 	'aliases' => array(
-
+        'Analytics' => 'Thujohn\Analytics\AnalyticsFacade',
         'Sentry' => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
         'App'             => 'Illuminate\Support\Facades\App',
 		'Artisan'         => 'Illuminate\Support\Facades\Artisan',

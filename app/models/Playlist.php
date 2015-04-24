@@ -12,7 +12,7 @@ class Playlist extends Ardent {
      * @var string
      */
     protected $table = 'playlists';
-    protected $fillable = array('group_id','name','created_at', 'updated_at');
+    protected $fillable = array('group_id','name','invitecode','votes','created_at', 'updated_at');
 
 
     public function Group()
@@ -23,6 +23,11 @@ class Playlist extends Ardent {
     public function tracks()
     {
         return $this->hasMany('Track');
+    }
+
+    public function getRankAttribute()
+    {
+        return $this->newQuery()->where('votes', '>=', $this->votes)->count();
     }
 
 }

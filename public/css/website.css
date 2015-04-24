@@ -145,21 +145,44 @@ input:focus { outline:none; }
 }
 
 #moveme li:hover{
-    border-right: 2px solid #333333;
+
+}
+form { margin: 20px 0 0 0;}
+.closethis { position:absolute; font-weight: bold; margin: -10px 0 0 -12px;}
+#moveme {
+    position: relative;
+    margin: 0px auto;
+    padding: 0px;
+    overflow: hidden;
+    max-height: 536px;
 }
 
+.facebookbtn { padding: 20px; background: #435a8b; color: #fff; font-weight: bold; font-size: 15px;}
+.loginbtn { padding: 20px; background: #5cb85c; color: #fff; font-weight: bold; font-size: 15px;}
+.panel-heading { margin: 20px 0px 0px 0px; color: #2c2c2b;}
+.accountservice { float: right; margin: 15px 20px;}
+.sfeerbg {background: url(/images/1026164_25058138.jpg) no-repeat; width: 100%; height: 500px; text-align:center;}
+.sfeerbg h1{
+    font-size: 30px;
+    text-transform: uppercase;
+    color: #2c2c2b;
+    position: relative;
+    top: 100px;
+    background: #fff;
+    display: inline;
+    font-weight: bold;
+    padding: 10px;
+    line-height: 55px;
+}
 .arrowicon { width: 28px;}
-
+.cookiemelding { padding: 10px; background: #fff; position: fixed; bottom: 0; border: 1px solid #ce3f3e; width: 200px; right: 0; font-size: 11px;}
 .inline-form > label {
     background: none repeat scroll 0 0 #fff;
     color: #777;
-    font-family: Roboto Slab;
     font-size: 11px;
     font-weight: normal;
     letter-spacing: 0.3px;
     padding: 1px 19px;
-    position: absolute;
-    right: 10px;
     text-transform: uppercase;
     top: -11px;
 }
@@ -865,6 +888,14 @@ header {
     color: white;
 }
 
+#display-invitation-users { display: none; position:absolute; margin: -50px 0 0 0; z-index: 100000;
+    -webkit-box-shadow: 0px 0px 7px 0px rgba(50, 50, 50, 1);
+    -moz-box-shadow:    0px 0px 7px 0px rgba(50, 50, 50, 1);
+    box-shadow:         0px 0px 7px 0px rgba(50, 50, 50, 1);
+}
+#display-invitation-users ul {
+    margin: 0;
+}
 .show {
     visibility: visible;
     opacity: 1;
@@ -12086,7 +12117,10 @@ blockquote {
 	color:#fff;
 }
 
-
+.profilepic { width: 100%; }
+.profilepics li { list-style-type: none; float: left; margin: 0 5px 5px 0; border: 1px solid #2c2c2b;}
+.competition-name { font-size: 20px;}
+.profilepics img { width: 40px; }
 /********** Gray *************/
 .gray,
 .actionBar > a.buttonNext,
@@ -12122,3 +12156,7 @@ blockquote {
 .rank-no-participants {  font-size: 15px;
     font-weight: bold;}
 .clear { clear: both;}
+
+.activeplay > td { background: #b2c1e1 !important;}
+input[type="submit"] { background: #5cb85c; color: #fff; padding: 20px 0px; font-size: 14px; font-weight: bold; vertical-align: middle;}
+.invitecoder { background: #e6e9ee; padding: 20px; border: 1px dashed #cecece; word-wrap: break-word;}

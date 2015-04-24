@@ -36,8 +36,11 @@
                         </ul>
                     </div>
                     @endif
-                <h3>Welcome back!</h3>
-                    <p>Not an member yet? <a href="/signup">Create your own account here</a>.</p>
+                <h3 style="height: 50px;">Welcome back!</h3>
+                <div class="clear"></div>
+                <p>
+                    <a href="/signup" class="loginbtn">Create a Account!</a> <a href="/user/fb/register" class="facebookbtn">Signup with Facebook</a></p>
+                    <div class="clear"></div>
                     {{ Form::open(array('url' => Request::path())) }}
                                                         <div class="panel-heading">Account Information
                                                         </div>

@@ -6,7 +6,11 @@
 	"require": {
 		"laravel/framework": "4.2.*",
         "cartalyst/sentry": "2.1.*",
-        "laravelbook/ardent": "2.*"
+        "laravelbook/ardent": "2.*",
+        "pitchanon/facebook-connect": "dev-master",
+        "thujohn/analytics": "dev-master"
+
+
     },
 	"autoload": {
 		"classmap": [
@@ -35,5 +39,5 @@
 	"config": {
 		"preferred-install": "dist"
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "dev"
 }
